@@ -1,138 +1,131 @@
-import React from 'react';
-import { Sun, Zap, Shield, Cable, Factory, CheckCircle, Menu, Phone } from 'lucide-react';
+import React, { useState } from 'react';
+import { Sun, Zap, Cable, Factory, CheckCircle, Phone, Shield, Award, MessageCircle, Info, Hammer } from 'lucide-react';
 
 const App = () => {
-  const solarBrands = ["Adani Solar", "Tata Power Solar", "Waaree", "Vikram Solar"];
-  const inverterBrands = ["Havells", "Polycab", "Luminous", "Microtek", "Sukam"];
-  const wireBrands = ["Polycab", "Havells", "Finolex", "RR Kabel"];
+  const [inquiryType, setInquiryType] = useState('New Installation');
+  const [activePage, setActivePage] = useState('home'); // Navigation control
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    alert("Inquiry Sent Successfully! We will contact you soon.");
+  };
+
+  const WhatsAppButton = () => (
+    <a 
+      href="https://wa.me/919999999999?text=Hi, I am interested in Solar Installation." 
+      target="_blank" 
+      className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl z-50 hover:bg-green-600 transition-all flex items-center gap-2"
+    >
+      <MessageCircle size={28} />
+      <span className="font-bold hidden md:inline">Chat with Us</span>
+    </a>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
-      {/* Navigation Bar */}
-      <nav className="bg-white shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-20">
-          <div className="flex items-center gap-2">
-            <Sun className="text-orange-500" size={32} />
-            <span className="text-2xl font-black tracking-tighter text-gray-800">DUVATECH <span className="text-orange-600">SOLAR</span></span>
+    <div className="min-h-screen bg-white font-sans text-gray-900 scroll-smooth">
+      <WhatsAppButton />
+
+      {/* NAVIGATION */}
+      <nav className="bg-white shadow-lg sticky top-0 z-50 p-4">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActivePage('home')}>
+            <Sun className="text-orange-600" size={32} />
+            <h1 className="text-2xl font-black">DUVATECH <span className="text-orange-600">SOLAR</span></h1>
           </div>
-          <div className="hidden md:flex gap-8 font-bold text-gray-600">
-            <a href="#products" className="hover:text-orange-600">Products</a>
-            <a href="#panels" className="hover:text-orange-600">Solar Panels</a>
-            <a href="#inverters" className="hover:text-orange-600">Inverters</a>
-            <a href="#wires" className="hover:text-orange-600">Wires & Structure</a>
+          <div className="hidden md:flex gap-6 font-bold text-gray-600 uppercase text-sm">
+            <button onClick={() => setActivePage('home')} className={`hover:text-orange-600 ${activePage === 'home' ? 'text-orange-600 border-b-2 border-orange-600' : ''}`}>Home</button>
+            <button onClick={() => setActivePage('about')} className={`hover:text-orange-600 ${activePage === 'about' ? 'text-orange-600 border-b-2 border-orange-600' : ''}`}>About Us</button>
+            <button onClick={() => setActivePage('services')} className={`hover:text-orange-600 ${activePage === 'services' ? 'text-orange-600 border-b-2 border-orange-600' : ''}`}>Services</button>
           </div>
-          <button className="bg-orange-600 text-white px-6 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-orange-700 transition">
-            <Phone size={18} /> Get Quote
-          </button>
+          <button className="bg-orange-600 text-white px-5 py-2 rounded-lg font-bold">Inquiry Now</button>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <header className="relative bg-gray-900 h-[500px] flex items-center justify-center text-center text-white px-4">
-        <div className="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')] bg-cover bg-center"></div>
-        <div className="relative z-10">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-4">Authorized Solar Dealer</h1>
-          <p className="text-xl md:text-2xl font-light text-gray-300">Premium Brands. Expert Installation. Lifetime Support.</p>
-        </div>
-      </header>
+      {/* CONTENT LOGIC */}
+      {activePage === 'home' && (
+        <>
+          {/* HERO */}
+          <header className="bg-slate-900 text-white py-24 px-4 text-center">
+            <h2 className="text-5xl md:text-7xl font-black mb-6">Sustainable Energy for Life</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">Authorized Dealer of Adani, Tata & Waaree. We provide complete solar solutions with branded accessories.</p>
+            <button onClick={() => setActivePage('services')} className="mt-8 bg-orange-600 px-8 py-3 rounded-full font-bold text-lg hover:bg-white hover:text-orange-600 transition">View Products</button>
+          </header>
 
-      {/* 1. Solar Panels Section (Tata, Adani, Waaree) */}
-      <section id="panels" className="max-w-7xl mx-auto py-20 px-4">
-        <div className="flex items-center gap-4 mb-10">
-          <div className="h-1 w-20 bg-orange-600"></div>
-          <h2 className="text-4xl font-black uppercase">High-Efficiency Solar Panels</h2>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {solarBrands.map((brand, i) => (
-            <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-xl border border-gray-100 hover:border-orange-500 transition-all group">
-              <div className="h-48 bg-gray-200 flex items-center justify-center relative">
-                <Sun size={60} className="text-gray-400 group-hover:text-orange-500 transition-colors" />
-                <div className="absolute top-4 right-4 bg-orange-600 text-white text-xs px-3 py-1 rounded-full">Top Seller</div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-2xl font-bold mb-2">{brand}</h3>
-                <p className="text-gray-600 mb-4">Mono-Perc, Bi-facial high efficiency modules for maximum power generation.</p>
-                <ul className="text-sm space-y-2 text-gray-500">
-                  <li className="flex items-center gap-2"><CheckCircle size={14} className="text-green-500"/> 25 Years Warranty</li>
-                  <li className="flex items-center gap-2"><CheckCircle size={14} className="text-green-500"/> Weather Resistant</li>
-                </ul>
-              </div>
+          {/* SMART FORM */}
+          <section className="py-20 bg-gray-100 px-4">
+            <div className="max-w-3xl mx-auto bg-white p-8 rounded-3xl shadow-xl">
+              <h3 className="text-3xl font-bold text-center mb-8">Get Your Solar Quote</h3>
+              <form onSubmit={handleSubmit} className="grid gap-4">
+                <select onChange={(e) => setInquiryType(e.target.value)} className="p-4 border rounded-xl bg-gray-50 font-bold">
+                  <option value="New Installation">New Solar Installation</option>
+                  <option value="Service/Repair">Solar Service/Repair</option>
+                </select>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <input type="text" placeholder="Your Name" className="p-4 border rounded-xl" required />
+                  <input type="tel" placeholder="Mobile Number" className="p-4 border rounded-xl" required />
+                </div>
+                <input type="text" placeholder="Your Address" className="p-4 border rounded-xl" required />
+                {inquiryType === 'New Installation' ? (
+                  <input type="number" placeholder="Monthly Electricity Bill (₹)" className="p-4 border border-orange-300 rounded-xl" />
+                ) : (
+                  <input type="text" placeholder="Current Solar Capacity (e.g. 5kW)" className="p-4 border border-blue-300 rounded-xl" />
+                )}
+                <button className="bg-orange-600 text-white py-4 rounded-xl font-black text-lg shadow-lg">Submit Request</button>
+              </form>
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
+        </>
+      )}
 
-      {/* 2. Inverters Section (Havells, Polycab) */}
-      <section id="inverters" className="bg-gray-100 py-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-4 mb-10 justify-end">
-            <h2 className="text-4xl font-black uppercase text-right">Smart Solar Inverters</h2>
-            <div className="h-1 w-20 bg-orange-600"></div>
-          </div>
-          <div className="grid md:grid-cols-4 gap-6">
-            {inverterBrands.map((brand, i) => (
-              <div key={i} className="bg-white p-6 rounded-xl shadow-md text-center group hover:bg-orange-600 transition-colors">
-                <Zap size={40} className="mx-auto mb-4 text-orange-600 group-hover:text-white" />
-                <h4 className="text-xl font-bold group-hover:text-white">{brand}</h4>
-                <p className="text-gray-500 text-sm mt-2 group-hover:text-orange-100">Hybrid & On-Grid</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Wires & Structure Section */}
-      <section id="wires" className="max-w-7xl mx-auto py-20 px-4">
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Wires */}
-          <div className="bg-white p-10 rounded-3xl shadow-2xl border-l-8 border-orange-600">
-            <Cable className="text-orange-600 mb-6" size={50} />
-            <h3 className="text-3xl font-bold mb-6">Premium Wiring Solutions</h3>
-            <div className="flex flex-wrap gap-4">
-              {wireBrands.map((b, i) => (
-                <span key={i} className="bg-gray-100 px-4 py-2 rounded-md font-bold text-gray-700">#{b}</span>
-              ))}
+      {activePage === 'about' && (
+        <section className="max-w-5xl mx-auto py-20 px-4">
+          <h2 className="text-4xl font-black mb-8 border-l-8 border-orange-600 pl-4">About Duvatech Solar</h2>
+          <p className="text-xl text-gray-600 leading-relaxed mb-6">हम भारत के सौर ऊर्जा क्षेत्र में एक अग्रणी नाम हैं। हमारा लक्ष्य हर घर और उद्योग को सस्ती और स्वच्छ ऊर्जा से जोड़ना है। हम सिर्फ पैनल नहीं बेचते, हम विश्वास बेचते हैं।</p>
+          <div className="grid md:grid-cols-2 gap-8 mt-12">
+            <div className="bg-orange-50 p-6 rounded-2xl">
+              <Shield className="text-orange-600 mb-4" size={40} />
+              <h4 className="text-2xl font-bold mb-2">Quality Assurance</h4>
+              <p>We use only top-tier brands like Adani, Polycab, and Havells.</p>
             </div>
-            <p className="mt-6 text-gray-600 leading-relaxed">
-              We exclusively use <strong>Havells</strong> and <strong>Polycab</strong> DC/AC cables to ensure zero power loss and maximum safety against short-circuits.
-            </p>
-          </div>
-          {/* Structure */}
-          <div className="bg-white p-10 rounded-3xl shadow-2xl border-l-8 border-gray-800">
-            <Factory className="text-gray-800 mb-6" size={50} />
-            <h3 className="text-3xl font-bold mb-6">Heavy-Duty Mounting</h3>
-            <p className="text-gray-600 leading-relaxed mb-6">
-              Our structures are made of <strong>Hot-Dip Galvanized (GI)</strong> material, designed to withstand wind speeds up to 150km/hr.
-            </p>
-            <div className="grid grid-cols-2 gap-4 text-sm font-bold uppercase text-gray-500">
-              <div className="flex items-center gap-2"><CheckCircle size={16} className="text-orange-600"/> Rust Proof</div>
-              <div className="flex items-center gap-2"><CheckCircle size={16} className="text-orange-600"/> Long Life</div>
+            <div className="bg-blue-50 p-6 rounded-2xl">
+              <Award className="text-blue-600 mb-4" size={40} />
+              <h4 className="text-2xl font-bold mb-2">Expert Team</h4>
+              <p>Highly trained engineers for safe and durable installation.</p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-10 border-b border-gray-800 pb-10">
-          <div>
-            <h4 className="text-2xl font-bold mb-4 text-orange-500">DUVATECH SOLAR</h4>
-            <p className="text-gray-400 italic">"Empowering India with Branded Solar Solutions."</p>
+      {activePage === 'services' && (
+        <section className="max-w-7xl mx-auto py-20 px-4">
+          <h2 className="text-4xl font-black text-center mb-16">OUR SOLUTIONS</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="border-2 p-8 rounded-3xl">
+              <Sun className="text-orange-600 mb-6" size={48} />
+              <h3 className="text-2xl font-bold mb-4">Solar Panels</h3>
+              <p className="text-gray-500 mb-4">Tata Power, Adani Solar, Waaree Mono-perc modules.</p>
+            </div>
+            <div className="border-2 p-8 rounded-3xl">
+              <Hammer className="text-gray-700 mb-6" size={48} />
+              <h3 className="text-2xl font-bold mb-4">Mounting Structure</h3>
+              <p className="text-gray-500 mb-4">Hot-dip Galvanized (GI) structures to withstand high winds.</p>
+            </div>
+            <div className="border-2 p-8 rounded-3xl">
+              <Cable className="text-blue-600 mb-6" size={48} />
+              <h3 className="text-2xl font-bold mb-4">Branded Accessories</h3>
+              <p className="text-gray-500 mb-4">Polycab Wires, Havells Inverters, and High-quality Earthing.</p>
+            </div>
           </div>
-          <div>
-            <h5 className="font-bold mb-4 uppercase">Our Partners</h5>
-            <p className="text-gray-400 text-sm">Adani | Tata | Waaree | Havells | Polycab | Finolex | Vikram Solar</p>
-          </div>
-          <div>
-            <h5 className="font-bold mb-4 uppercase">Contact Info</h5>
-            <p className="text-gray-400 text-sm">Main Market, Your City, India</p>
-            <p className="text-gray-400 text-sm">Email: info@duvatechsolar.com</p>
-          </div>
-        </div>
-        <p className="text-center mt-8 text-gray-600 text-sm">© 2026 Duvatech Solar. All Rights Reserved.</p>
-      </footer>
-    </div>
-  );
-};
+        </section>
+      )}
 
-export default App;
+      {/* FOOTER */}
+      <footer className="bg-gray-900 text-white pt-16 pb-8 px-4">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
+          <div>
+            <h4 className="text-2xl font-bold text-orange-600 mb-4">DUVATECH SOLAR</h4>
+            <p className="text-gray-400 leading-relaxed">Authorized dealer of world-class solar brands. Quality is our priority.</p>
+          </div>
+          <div>
+            <h4 className="text-xl font-bold mb-4">Quick Links</h4>
+            <ul className="space-y-
