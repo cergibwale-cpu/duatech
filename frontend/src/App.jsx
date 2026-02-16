@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
+// Professional Icons
 const SunIcon = () => <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>;
+const MenuIcon = () => <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>;
+const WhatsAppIcon = () => <svg viewBox="0 0 24 24" width="35" height="35" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.558 0 11.894-5.335 11.897-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>;
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Residential');
   const [isAdmin, setIsAdmin] = useState(window.location.hash === "#admin");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [password, setPassword] = useState('');
+  const [leads, setLeads] = useState([]);
+  const [showMenu, setShowMenu] = useState(false);
+
+  const API_URL = "https://duatech.onrender.com/api/leads";
 
   useEffect(() => {
     const handleHashChange = () => setIsAdmin(window.location.hash === "#admin");
@@ -12,150 +22,167 @@ export default function App() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-  const projectData = {
-    Residential: { range: "3KW - 10KW", info: "Maximize savings for your home. We handle everything from subsidy paperwork to final installation.", img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800" },
-    Commercial: { range: "10KW - 100KW", info: "Scalable solar solutions for schools and hospitals. Reduce fixed costs and improve your green rating.", img: "https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=800" },
-    Industrial: { range: "100KW - 1MW+", info: "Heavy-duty PV systems for factories. Built for high performance and 25+ years of durability.", img: "https://images.unsplash.com/photo-1509391366360-fe5bb6583e2c?w=800" }
+  const fetchLeads = async () => {
+    try {
+      const res = await axios.get(API_URL);
+      setLeads(res.data);
+    } catch (err) { console.error("Error fetching data:", err); }
   };
 
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (password === "admin123") { setIsLoggedIn(true); fetchLeads(); }
+    else { alert("Wrong Password!"); }
+  };
+
+  const clearHash = () => { window.location.hash = ""; setIsAdmin(false); setIsLoggedIn(false); };
+
+  // --- ADMIN VIEW ---
   if (isAdmin) {
+    if (!isLoggedIn) {
+      return (
+        <div style={{height:'100vh', display:'flex', justifyContent:'center', alignItems:'center', background:'#f0f2f5', fontFamily:'sans-serif'}}>
+          <form onSubmit={handleLogin} style={{background:'white', padding:'40px', borderRadius:'20px', boxShadow:'0 10px 25px rgba(0,0,0,0.1)', textAlign:'center', width:'320px'}}>
+            <h2 style={{color:'#1e3a8a'}}>Admin Login</h2>
+            <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} style={{width:'100%', padding:'12px', margin:'20px 0', borderRadius:'10px', border:'1px solid #ddd'}} />
+            <button type="submit" style={{width:'100%', padding:'12px', background:'#1e3a8a', color:'white', border:'none', borderRadius:'10px', cursor:'pointer'}}>Login</button>
+            <p onClick={clearHash} style={{marginTop:'20px', color:'#666', cursor:'pointer'}}>Back to Website</p>
+          </form>
+        </div>
+      );
+    }
     return (
-      <div style={{padding: '40px', fontFamily: 'sans-serif', backgroundColor: '#f4f7f6', minHeight: '100vh'}}>
-        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', background:'white', padding:'20px', borderRadius:'12px', boxShadow:'0 4px 10px rgba(0,0,0,0.05)'}}>
-          <h1 style={{margin:0, color:'#1e3a8a'}}>DUVATECH Admin</h1>
-          <button onClick={() => { window.location.hash = ""; }} style={{padding:'10px 20px', cursor:'pointer', background:'#1e3a8a', color:'white', border:'none', borderRadius:'5px'}}>Exit Admin</button>
+      <div style={{padding: '40px', fontFamily: 'sans-serif', minHeight: '100vh', background:'#f4f7f6'}}>
+        <div style={{display:'flex', justifyContent:'space-between', background:'white', padding:'20px', borderRadius:'15px', boxShadow:'0 4px 10px rgba(0,0,0,0.05)'}}>
+          <h2 style={{margin:0, color:'#1e3a8a'}}>MongoDB Real-time Leads</h2>
+          <button onClick={clearHash} style={{padding:'10px 20px', background:'#dc2626', color:'white', border:'none', borderRadius:'8px', cursor:'pointer'}}>Logout & Clear URL</button>
         </div>
-        <div style={{marginTop:'30px'}}>
-           <p>Your Leads will appear here once connected to the backend.</p>
-        </div>
+        <table style={{width:'100%', marginTop:'30px', background:'white', borderRadius:'10px', overflow:'hidden', borderCollapse:'collapse'}}>
+          <thead style={{background:'#1e3a8a', color:'white'}}>
+            <tr><th style={tdS}>Name</th><th style={tdS}>Phone</th><th style={tdS}>Address</th></tr>
+          </thead>
+          <tbody>
+            {leads.map((l, i) => (<tr key={i} style={{borderBottom:'1px solid #eee'}}><td style={tdS}>{l.name}</td><td style={tdS}>{l.mobile || l.phone}</td><td style={tdS}>{l.address}</td></tr>))}
+          </tbody>
+        </table>
       </div>
     );
   }
 
+  // --- MAIN WEBSITE VIEW ---
   return (
-    <div style={{ margin: 0, padding: 0, fontFamily: 'Arial, sans-serif', color: '#334155', scrollBehavior: 'smooth' }}>
+    <div style={{ margin: 0, padding: 0, fontFamily: 'Arial, sans-serif', scrollBehavior: 'smooth' }}>
       
-      {/* --- NAVBAR --- */}
+      {/* WHATSAPP */}
+      <a href="https://wa.me/91XXXXXXXXXX" target="_blank" style={waBtnS}><WhatsAppIcon /></a>
+
+      {/* NAVBAR */}
       <nav style={navS}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.8rem', fontWeight: '900' }}>
           <SunIcon /> <span style={{color: '#1e3a8a'}}>DUVA</span><span style={{color: '#22c55e'}}>TECH</span>
         </div>
-        <div style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
+        
+        {/* Desktop Menu */}
+        <div className="desktop-menu" style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
+          <a href="#home" style={linkS}>Home</a>
           <a href="#projects" style={linkS}>Services</a>
           <a href="#about" style={linkS}>About Us</a>
-          <a href="#contact" style={quoteBtnS}>GET FREE QUOTE</a>
+          <a href="#contact" style={quoteBtnS}>GET QUOTE</a>
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <div onClick={() => setShowMenu(!showMenu)} style={{cursor:'pointer', display:'none'}} className="mobile-toggle">
+          <MenuIcon />
         </div>
       </nav>
 
-      {/* --- HERO --- */}
+      {/* MOBILE DRAWER */}
+      {showMenu && (
+        <div style={{background:'white', padding:'20px', display:'flex', flexDirection:'column', gap:'15px', borderBottom:'2px solid #eee'}}>
+          <a href="#home" onClick={()=>setShowMenu(false)} style={linkS}>Home</a>
+          <a href="#projects" onClick={()=>setShowMenu(false)} style={linkS}>Services</a>
+          <a href="#about" onClick={()=>setShowMenu(false)} style={linkS}>About Us</a>
+        </div>
+      )}
+
+      {/* HERO */}
       <header id="home" style={heroS}>
         <div style={overlayS}>
-          <h1 style={{ fontSize: '4.5rem', marginBottom: '15px', fontWeight: '900' }}>The Future is <span style={{color: '#fbbf24'}}>Bright</span></h1>
-          <p style={{ fontSize: '1.4rem', maxWidth: '700px', marginBottom: '35px', opacity: 0.9 }}>Over 5 years of excellence in Solar EPC. We don't just install panels; we engineer energy independence.</p>
-          <a href="#contact" style={mainBtnS}>START YOUR SOLAR JOURNEY</a>
+          <h1 style={{ fontSize: '3.5rem', fontWeight: '900' }}>Clean Energy for a <br/><span style={{color: '#fbbf24'}}>Sustainable Future</span></h1>
+          <p style={{fontSize:'1.2rem', maxWidth:'600px'}}>Expert Solar EPC Services in Indore with 5+ Years of Trust.</p>
+          <a href="#contact" style={mainBtnS}>BOOK FREE SURVEY</a>
         </div>
       </header>
 
-      {/* --- ABOUT SECTION --- */}
-      <section id="about" style={{ padding: '100px 10%', display: 'flex', flexWrap: 'wrap', gap: '50px', alignItems: 'center' }}>
-        <div style={{ flex: 1, minWidth: '350px' }}>
-          <h2 style={{ fontSize: '3rem', color: '#1e3a8a', marginBottom: '20px' }}>5+ Years of Trust</h2>
-          <p style={{ fontSize: '1.15rem', lineHeight: '1.8', color: '#475569' }}>
-            Founded in Indore, <b>DUVATECH</b> has been at the forefront of the solar revolution for over half a decade. We specialize in end-to-end solar solutions—from initial site survey to government subsidy approvals.
-          </p>
-          <div style={{ display: 'flex', gap: '30px', marginTop: '30px' }}>
-            <div><h3 style={{color: '#22c55e', margin:0}}>500+</h3><p>Projects Done</p></div>
-            <div><h3 style={{color: '#22c55e', margin:0}}>5MW+</h3><p>Power Installed</p></div>
-            <div><h3 style={{color: '#22c55e', margin:0}}>100%</h3><p>Happy Clients</p></div>
-          </div>
-        </div>
-        <div style={{ flex: 1, minWidth: '350px', background: '#1e3a8a', padding: '40px', borderRadius: '20px', color: 'white' }}>
-          <h3>Our Commitment</h3>
-          <p>We use only Tier-1 components and provide 25-year performance warranties. Our in-house maintenance team ensures your system generates maximum power, year after year.</p>
+      {/* ABOUT */}
+      <section id="about" style={{ padding: '80px 10%', textAlign:'center' }}>
+        <h2 style={{fontSize:'2.5rem', color:'#1e3a8a'}}>Why Duva Tech?</h2>
+        <p style={{maxWidth:'800px', margin:'20px auto', fontSize:'1.1rem', lineHeight:'1.8'}}>
+          With over <b>5 years of experience</b> and <b>500+ successful installations</b> in Indore, we are your premium partner for solar transitions. We handle everything from site analysis to government subsidy management.
+        </p>
+        <div style={{display:'flex', justifyContent:'center', gap:'50px', marginTop:'30px', flexWrap:'wrap'}}>
+           <div style={statS}><h2>5+</h2><p>Years</p></div>
+           <div style={statS}><h2>500+</h2><p>Projects</p></div>
+           <div style={statS}><h2>5MW+</h2><p>Installed</p></div>
         </div>
       </section>
 
-      {/* --- SERVICES (PROJECTS) --- */}
-      <section id="projects" style={{ padding: '80px 10%', textAlign: 'center', backgroundColor: '#f8fafc' }}>
-        <h2 style={{ fontSize: '2.8rem', color: '#1e3a8a', marginBottom: '40px' }}>Solution for Every Need</h2>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginBottom: '50px' }}>
+      {/* SERVICES */}
+      <section id="projects" style={{ padding: '80px 10%', background: '#f8fafc' }}>
+        <h2 style={{textAlign:'center', marginBottom:'40px', fontSize:'2.5rem', color:'#1e3a8a'}}>Our Services</h2>
+        <div style={{display:'flex', justifyContent:'center', gap:'10px', marginBottom:'40px'}}>
           {['Residential', 'Commercial', 'Industrial'].map(t => (
-            <button key={t} onClick={() => setActiveTab(t)} style={{ ...tabBtnS, backgroundColor: activeTab === t ? '#1e3a8a' : 'white', color: activeTab === t ? 'white' : '#64748b' }}>{t}</button>
+            <button key={t} onClick={()=>setActiveTab(t)} style={{...tabBtnS, background: activeTab===t ? '#1e3a8a':'white', color: activeTab===t ? 'white':'#666'}}>{t}</button>
           ))}
         </div>
-        <div style={cardS}>
-          <img src={projectData[activeTab].img} style={imgS} alt="Solar" />
-          <div style={{ flex: 1, textAlign: 'left' }}>
-            <h3 style={{ fontSize: '2.2rem', color: '#1e3a8a' }}>{activeTab} Installation</h3>
-            <p style={{ fontSize: '1.2rem', lineHeight: '1.8' }}>{projectData[activeTab].info}</p>
-            <div style={{ background: '#f0fdf4', padding: '15px', borderRadius: '12px', borderLeft: '5px solid #22c55e', marginTop: '25px' }}>
-              <b style={{color:'#166534'}}>Capacity Range:</b> {projectData[activeTab].range}
-            </div>
-          </div>
+        <div style={{display:'flex', gap:'40px', background:'white', padding:'40px', borderRadius:'20px', flexWrap:'wrap', alignItems:'center', boxShadow:'0 10px 30px rgba(0,0,0,0.05)'}}>
+           <img src="https://images.unsplash.com/photo-1509391366360-fe5bb6583e2c?w=500" style={{width:'100%', maxWidth:'400px', borderRadius:'15px'}} />
+           <div style={{flex:1}}>
+              <h3>{activeTab} Solar Installation</h3>
+              <p>Top-tier components with 25-year performance warranty. Optimized for maximum ROI.</p>
+           </div>
         </div>
       </section>
 
-      {/* --- FORMS (DUAL COLUMN) --- */}
+      {/* CONTACT */}
       <section id="contact" style={{ padding: '80px 5%', background: '#0f172a' }}>
-        <h2 style={{textAlign:'center', color:'white', marginBottom:'50px', fontSize:'2.5rem'}}>Get in Touch</h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '30px', maxWidth: '1200px', margin: '0 auto' }}>
-          {/* Form 1 */}
           <div style={formCardS}>
-            <h3 style={{ color: '#1e3a8a', fontSize: '1.8rem', marginTop:0 }}>New Installation</h3>
-            <p style={{color:'#64748b'}}>Request a free site visit and customized quote.</p>
-            <input style={inS} placeholder="Full Name" />
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <input style={inS} placeholder="Phone No." />
-              <input style={inS} placeholder="Monthly Bill (₹)" />
-            </div>
-            <textarea style={{ ...inS, height: '80px' }} placeholder="Installation Address"></textarea>
-            <button style={{ ...actionBtnS, background: '#1e3a8a' }}>REQUEST SURVEY</button>
+            <h3 style={{color:'#1e3a8a'}}>New Installation Inquiry</h3>
+            <input style={inS} placeholder="Your Name" />
+            <input style={inS} placeholder="Mobile No." />
+            <textarea style={{...inS, height:'80px'}} placeholder="Site Address"></textarea>
+            <button style={{...actionBtnS, background:'#1e3a8a'}}>SUBMIT</button>
           </div>
-
-          {/* Form 2 */}
-          <div style={{ ...formCardS, background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <h3 style={{ color: '#22c55e', fontSize: '1.8rem', marginTop:0 }}>Expert Maintenance</h3>
-            <p style={{color:'#94a3b8'}}>Service, cleaning, or repair for existing plants.</p>
+          <div style={{...formCardS, background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', color:'white'}}>
+            <h3 style={{color:'#22c55e'}}>Maintenance & Service</h3>
             <input style={darkInS} placeholder="Name" />
-            <input style={darkInS} placeholder="Phone Number" />
-            <input style={darkInS} placeholder="Plant Size (e.g. 10KW)" />
-            <textarea style={{ ...darkInS, height: '80px' }} placeholder="Site Location"></textarea>
-            <button style={{ ...actionBtnS, background: '#22c55e' }}>BOOK SERVICE VISIT</button>
+            <input style={darkInS} placeholder="Phone" />
+            <textarea style={{...darkInS, height:'80px'}} placeholder="Plant Location"></textarea>
+            <button style={{...actionBtnS, background:'#22c55e'}}>BOOK SERVICE</button>
           </div>
         </div>
       </section>
 
-      {/* --- FOOTER --- */}
-      <footer style={{ background: '#020617', padding: '60px 10%', color: '#94a3b8' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '40px' }}>
-          <div style={{maxWidth:'300px'}}>
-            <h3 style={{color:'white'}}>DUVA TECH</h3>
-            <p>Your local Indore partner for sustainable and affordable energy solutions since 2019.</p>
-          </div>
-          <div>
-            <h3 style={{color:'white'}}>Head Office</h3>
-            <p>Indore, Madhya Pradesh</p>
-            <p>+91 99999 88888</p>
-            <p>contact@duvatech.com</p>
-          </div>
-        </div>
-        <p style={{ borderTop: '1px solid #1e293b', paddingTop: '20px', textAlign: 'center', fontSize:'0.9rem' }}>© 2026 DUVA TECH SOLAR PVT LTD.</p>
+      <footer style={{padding:'40px', textAlign:'center', background:'#020617', color:'#94a3b8'}}>
+        <p>© 2026 DUVA TECH SOLAR PVT LTD. Indore, India.</p>
+        <a href="#admin" style={{fontSize:'10px', color:'#1e3a8a', textDecoration:'none'}}>Staff Login</a>
       </footer>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .desktop-menu { display: none !important; }
+          .mobile-toggle { display: block !important; }
+        }
+      `}</style>
     </div>
   );
 }
 
-// --- CSS STYLES ---
+// --- STYLES ---
 const navS = { display: 'flex', justifyContent: 'space-between', padding: '15px 8%', background: 'white', position: 'sticky', top: 0, zIndex: 1000, boxShadow: '0 4px 12px rgba(0,0,0,0.08)', alignItems: 'center' };
 const linkS = { textDecoration: 'none', color: '#475569', fontWeight: 'bold' };
-const quoteBtnS = { textDecoration: 'none', background: '#1e3a8a', color: 'white', padding: '12px 25px', borderRadius: '5px', fontWeight: 'bold' };
-const heroS = { height: '85vh', background: 'url("https://images.unsplash.com/photo-1509391366360-fe5bb6583e2c?w=1200")', backgroundSize: 'cover', backgroundPosition: 'center' };
-const overlayS = { height: '100%', width: '100%', background: 'linear-gradient(rgba(15,23,42,0.8), rgba(15,23,42,0.3))', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: 'white', textAlign: 'center', padding: '0 20px' };
-const mainBtnS = { textDecoration: 'none', background: '#22c55e', color: 'white', padding: '18px 45px', borderRadius: '5px', fontWeight: '900', fontSize: '1.1rem' };
-const tabBtnS = { padding: '12px 35px', borderRadius: '5px', border: '1px solid #e2e8f0', cursor: 'pointer', fontWeight: 'bold' };
-const cardS = { display: 'flex', gap: '50px', background: 'white', padding: '50px', borderRadius: '20px', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', flexWrap: 'wrap', alignItems: 'center' };
-const imgS = { width: '100%', maxWidth: '450px', borderRadius: '12px', height: '320px', objectFit: 'cover' };
-const formCardS = { flex: 1, minWidth: '350px', background: 'white', padding: '40px', borderRadius: '20px', textAlign: 'left' };
-const inS = { width: '100%', padding: '14px', marginBottom: '15px', borderRadius: '8px', border: '1px solid #ddd', boxSizing: 'border-box' };
-const darkInS = { ...inS, background: 'rgba(255,255,255,0.08)', color: 'white', border: '1px solid rgba(255,255,255,0.2)' };
-const actionBtnS = { width: '100%', padding: '16px', border: 'none', color: 'white', fontWeight: 'bold', borderRadius: '5px', cursor: 'pointer' };
+const quoteBtnS = { textDecoration: 'none', background: '#1e3a8a', color: 'white', padding: '10px 20px', borderRadius: '5px', fontWeight: 'bold' };
+const heroS = { height: '80vh', background: 'url("https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=1200") center/cover no-repeat' };
+const overlayS = { height: '100%', width: '100%', background: 'rgba(15,23,42,0.6)', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', color: 'white', textAlign: 'center' };
+const mainBtnS = { textDecoration: 'none', background: '#22c55e', color: 'white
