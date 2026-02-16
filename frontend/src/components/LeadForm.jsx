@@ -4,7 +4,7 @@ export default function LeadForm(){
 const [data,setData]=useState({name:'',email:'',mobile:''})
 const submit=async(e)=>{
 e.preventDefault()
-await axios.post(https://duatech.onrender.com/'/api/leads',data)
+await axios.post('https://duatech.onrender.com/api/leads',data)
 alert('Lead Submitted')
 }
 return(
