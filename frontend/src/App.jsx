@@ -3,8 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 
 // ध्यान दे: यहाँ './components/' लगाना जरूरी है क्योंकि तेरी फाइलें उस फोल्डर में हैं
 import Navbar from './components/Navbar'; 
-import Home from './components/Home';     
-import Admin from './components/Admin';   
+import Home from './/Home';     
+import Admin from './Admin';   
 
 function App() {
   return (
