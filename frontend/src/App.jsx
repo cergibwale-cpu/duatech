@@ -3,13 +3,13 @@ import axios from 'axios';
 
 function App() {
   const [formData, setFormData] = useState({ 
-    name: '', phone: '', address: '', inquiryType: 'Residential', bill: '' 
+    name: '', phone: '', address: '', inquiryType: 'Residential' 
   });
-  const [scrolled, setScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  // Navbar Scroll Effect
+  // Navbar color change on scroll
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -17,177 +17,143 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // यह तेरा लाइव रेंडर लिंक है
       await axios.post('https://duatech.onrender.com/api/leads', formData);
-      alert("✅ Inquiry Sent! Our Team will contact you within 24 hours.");
-      setFormData({ name: '', phone: '', address: '', inquiryType: 'Residential', bill: '' });
+      alert("✅ Inquiry Submitted Successfully!");
+      setFormData({ name: '', phone: '', address: '', inquiryType: 'Residential' });
     } catch (err) {
-      alert("❌ Error sending data. Check your connection.");
+      alert("❌ Submission Failed. Please try again.");
     }
   };
 
   return (
-    <div className="font-sans bg-white overflow-x-hidden">
-      
-      {/* 1. STICKY NAVBAR */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-xl py-2' : 'bg-transparent py-4 text-white'}`}>
+    <div className="min-h-screen bg-white font-sans text-gray-900">
+      {/* 1. STICKY MODERN NAVBAR */}
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-lg py-2' : 'bg-transparent py-5 text-white'}`}>
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="text-2xl font-black tracking-tighter uppercase italic">
-            <span className={scrolled ? 'text-blue-900' : 'text-orange-400'}>Dua</span>Tech
+          <div className="text-3xl font-extrabold tracking-tighter italic">
+            <span className="text-orange-500">DUA</span>TECH SOLAR
           </div>
-          <div className="hidden md:flex space-x-8 font-bold uppercase text-sm tracking-widest">
-            <a href="#home" className="hover:text-orange-500">Home</a>
-            <a href="#services" className="hover:text-orange-500">Services</a>
-            <a href="#about" className="hover:text-orange-500">Why Us</a>
-            <a href="#contact" className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition">Contact Now</a>
+          <div className="hidden md:flex space-x-8 font-bold text-sm uppercase">
+            <a href="#home" className="hover:text-orange-500 transition">Home</a>
+            <a href="#services" className="hover:text-orange-500 transition">Our Services</a>
+            <a href="#about" className="hover:text-orange-500 transition">Why Us</a>
+            <a href="#contact" className="bg-orange-600 text-white px-6 py-2 rounded-full hover:bg-orange-700 shadow-md">Get Started</a>
           </div>
         </div>
       </nav>
 
-      {/* 2. MEGA HERO SECTION */}
-      <section id="home" className="relative h-screen flex items-center justify-center text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/50 z-10"></div>
+      {/* 2. MEGA HERO SECTION (High Profile) */}
+      <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-black/60 z-10"></div>
         <img 
-          src="https://images.unsplash.com/photo-1509391366360-fe5bb584850a?auto=format&fit=crop&q=80&w=2000" 
-          className="absolute inset-0 w-full h-full object-cover" 
-          alt="Solar Panel Background"
+          src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2070&auto=format&fit=crop" 
+          className="absolute inset-0 w-full h-full object-cover scale-105 animate-pulse-slow" 
+          alt="Solar Panels"
         />
-        <div className="relative z-20 text-center px-4 max-w-5xl animate-fade-in-up">
-          <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight uppercase">
-            Power Your <span className="text-orange-400">Future</span> Today
+        <div className="relative z-20 text-center text-white px-4 max-w-5xl">
+          <h1 className="text-6xl md:text-8xl font-black mb-6 leading-tight uppercase tracking-tight">
+            Indore's No.1 <span className="text-orange-500">Solar Dealer</span>
           </h1>
-          <p className="text-xl md:text-2xl mb-10 font-light max-w-3xl mx-auto text-gray-200">
-            Indore's most trusted solar solutions provider. Reduce your electricity bills by up to 90% with Govt. Subsidy.
+          <p className="text-xl md:text-2xl mb-10 text-gray-300 font-light max-w-3xl mx-auto">
+            Authorized Vendor for TATA Power, Adani Solar & Waaree. Save up to 90% on electricity bills with government subsidy.
           </p>
-          <div className="flex flex-col md:flex-row justify-center gap-6">
-            <a href="#contact" className="bg-orange-500 hover:bg-white hover:text-orange-600 text-white font-black px-10 py-5 rounded-md text-xl transition-all transform hover:scale-105 shadow-2xl">GET FREE QUOTE</a>
-            <a href="#services" className="bg-transparent border-2 border-white text-white font-black px-10 py-5 rounded-md text-xl hover:bg-white hover:text-black transition-all">OUR SERVICES</a>
+          <div className="flex flex-wrap justify-center gap-6">
+            <a href="#contact" className="bg-orange-600 hover:bg-white hover:text-orange-600 text-white font-black px-12 py-5 rounded-md text-xl transition-all transform hover:scale-105 shadow-2xl">GET FREE QUOTE</a>
+            <a href="#services" className="bg-transparent border-2 border-white px-12 py-5 rounded-md text-xl font-bold hover:bg-white hover:text-black transition-all">EXPLORE SERVICES</a>
           </div>
         </div>
       </section>
 
-      {/* 3. FEATURE STATS (Differentiator) */}
-      <section className="bg-blue-900 py-20">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12 text-center text-white">
-          <div className="group p-4">
-            <h3 className="text-5xl font-black text-orange-400 mb-2">500+</h3>
-            <p className="uppercase tracking-widest font-bold opacity-70">Happy Clients</p>
-          </div>
-          <div className="group p-4">
-            <h3 className="text-5xl font-black text-orange-400 mb-2">12+</h3>
-            <p className="uppercase tracking-widest font-bold opacity-70">Years of Trust</p>
-          </div>
-          <div className="group p-4">
-            <h3 className="text-5xl font-black text-orange-400 mb-2">25Y</h3>
-            <p className="uppercase tracking-widest font-bold opacity-70">Warranty</p>
-          </div>
-          <div className="group p-4">
-            <h3 className="text-5xl font-black text-orange-400 mb-2">90%</h3>
-            <p className="uppercase tracking-widest font-bold opacity-70">Cost Saving</p>
-          </div>
+      {/* 3. TRUSTED BRANDS SECTION (Moving Bar) */}
+      <div className="bg-blue-900 py-10 overflow-hidden">
+        <div className="flex justify-around items-center gap-10 text-white/50 font-black text-2xl uppercase tracking-widest whitespace-nowrap">
+          <span>TATA POWER</span> <span>ADANI SOLAR</span> <span>WAAREE</span> <span>LUMINOUS</span> <span>VIKRAM SOLAR</span>
         </div>
-      </section>
+      </div>
 
       {/* 4. WHY CHOOSE US (Long Content) */}
       <section id="about" className="py-24 px-6 bg-gray-50">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
-          <div className="md:w-1/2">
-            <img 
-              src="https://images.unsplash.com/photo-1613665813446-82a78c468a1d?auto=format&fit=crop&q=80&w=1000" 
-              className="rounded-2xl shadow-2xl" 
-              alt="Installation"
-            />
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-black text-blue-900 uppercase">Why Choose Dua Tech?</h2>
+            <div className="w-24 h-2 bg-orange-500 mx-auto mt-4"></div>
           </div>
-          <div className="md:w-1/2">
-            <span className="text-orange-600 font-black uppercase tracking-widest">About Dua Tech</span>
-            <h2 className="text-5xl font-black text-blue-900 mt-4 mb-8">Why Indore Trusts Us?</h2>
-            <div className="space-y-6">
-              {[
-                {t: "Expert Installation", d: "Certified engineers with over a decade of experience."},
-                {t: "Govt. Subsidy Support", d: "We handle all the paperwork for your PM-Surya Ghar subsidy."},
-                {t: "Best Brands", d: "Authorized partners for Tata Power, Adani, and Waaree."}
-              ].map((item, i) => (
-                <div key={i} className="flex gap-4 p-4 bg-white rounded-xl shadow-sm border-l-4 border-orange-500">
-                  <div className="text-2xl">✅</div>
-                  <div>
-                    <h4 className="font-black text-xl">{item.t}</h4>
-                    <p className="text-gray-600">{item.d}</p>
-                  </div>
-                </div>
-              ))}
+          <div className="grid md:grid-cols-3 gap-12 text-center">
+            <div className="p-10 bg-white rounded-3xl shadow-xl border-b-8 border-orange-500">
+              <div className="text-5xl mb-6">🏆</div>
+              <h3 className="text-2xl font-bold mb-4">500+ Projects</h3>
+              <p className="text-gray-600">Successfully installed residential and commercial solar setups across Indore.</p>
+            </div>
+            <div className="p-10 bg-white rounded-3xl shadow-xl border-b-8 border-blue-900">
+              <div className="text-5xl mb-6">💰</div>
+              <h3 className="text-2xl font-bold mb-4">Govt. Subsidy</h3>
+              <p className="text-gray-600">Full assistance in PM-Surya Ghar Yojana paperwork and subsidy claims.</p>
+            </div>
+            <div className="p-10 bg-white rounded-3xl shadow-xl border-b-8 border-orange-500">
+              <div className="text-5xl mb-6">🛠️</div>
+              <h3 className="text-2xl font-bold mb-4">25Y Warranty</h3>
+              <p className="text-gray-600">Long-term reliability with authorized brand service and maintenance.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. SERVICES GRID (Professional Layout) */}
+      {/* 5. DETAILED SERVICES (Grid Layout) */}
       <section id="services" className="py-24 px-6 bg-white">
-        <div className="max-w-7xl mx-auto text-center mb-16">
-          <h2 className="text-5xl font-black text-blue-900">What We Offer</h2>
-          <div className="w-24 h-2 bg-orange-500 mx-auto mt-4"></div>
-        </div>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
-          {[
-            {n: "Residential Solar", i: "🏠", c: "Save up to ₹50,000 annually on home bills."},
-            {n: "Commercial Solar", i: "🏢", c: "Perfect for factories, schools, and hospitals."},
-            {n: "Solar Maintenance", i: "🔧", c: "Professional cleaning and health checkups."}
-          ].map((s) => (
-            <div key={s.n} className="p-10 border-2 border-gray-100 rounded-3xl hover:border-orange-500 transition-all group">
-              <div className="text-6xl mb-6">{s.i}</div>
-              <h3 className="text-2xl font-black mb-4 group-hover:text-orange-600 transition">{s.n}</h3>
-              <p className="text-gray-600 mb-6">{s.c}</p>
-              <a href="#contact" className="text-blue-900 font-bold hover:underline">Request Details →</a>
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+          <div>
+            <h2 className="text-5xl font-black text-blue-900 mb-8 leading-tight">Professional Solar <br/> Solutions for Every Need</h2>
+            <ul className="space-y-6">
+              {['Residential Solar Setup', 'Commercial Power Plants', 'Annual Maintenance Service', 'Solar Panel Cleaning'].map((item) => (
+                <li key={item} className="flex items-center gap-4 text-xl font-semibold border-b pb-4">
+                  <span className="text-orange-500 text-2xl">✔</span> {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="h-64 bg-gray-200 rounded-2xl overflow-hidden shadow-lg transform translate-y-8">
+              <img src="https://images.unsplash.com/photo-1611365892117-00ac5ef43759?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="Service 1"/>
             </div>
-          ))}
+            <div className="h-64 bg-gray-200 rounded-2xl overflow-hidden shadow-lg">
+              <img src="https://images.unsplash.com/photo-1592833159155-c62df1b65634?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="Service 2"/>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 6. LOGO SECTION (Brands We Handle) */}
-      <section className="py-16 border-y-2 border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 flex flex-wrap justify-between items-center opacity-40 grayscale hover:grayscale-0 transition-all gap-8">
-          <span className="text-3xl font-black">TATA SOLAR</span>
-          <span className="text-3xl font-black">ADANI SOLAR</span>
-          <span className="text-3xl font-black">WAAREE</span>
-          <span className="text-3xl font-black">LOOM SOLAR</span>
-          <span className="text-3xl font-black">VIKRAM</span>
-        </div>
-      </section>
-
-      {/* 7. CONTACT & LEAD FORM (Footer-Bottom) */}
-      <section id="contact" className="py-24 bg-blue-900 text-white relative">
+      {/* 6. FOOTER LEAD CAPTURING FORM */}
+      <section id="contact" className="py-24 bg-blue-900 relative text-white">
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-20">
           <div>
-            <h2 className="text-5xl font-black mb-6">Let's Go Solar!</h2>
-            <p className="text-xl text-blue-200 mb-10 leading-relaxed">
-              Drop your details, and our solar expert will visit your site for a FREE site survey and saving estimation.
-            </p>
-            <div className="space-y-6 text-lg">
-              <div className="flex items-center gap-4"><span>📍</span> 405, Dua Tech Tower, Vijay Nagar, Indore</div>
-              <div className="flex items-center gap-4"><span>📞</span> +91 99999 88888</div>
-              <div className="flex items-center gap-4"><span>✉️</span> support@duatechsolar.com</div>
+            <h2 className="text-5xl font-black mb-8 leading-tight">Switch to Clean Energy Today!</h2>
+            <p className="text-xl text-blue-200 mb-12 italic">Join hundreds of families in Indore saving on electricity.</p>
+            <div className="space-y-6 text-lg font-bold">
+              <p>📍 Office: Vijay Nagar, Indore, MP</p>
+              <p>📞 Phone: +91 99999 88888</p>
+              <p>✉ Email: info@duatechsolar.com</p>
             </div>
           </div>
-
-          <div className="bg-white p-10 rounded-3xl shadow-3xl text-gray-900">
-            <h3 className="text-3xl font-black mb-8 text-center text-blue-900 italic">Get A Call Back</h3>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <input type="text" placeholder="Full Name" className="w-full px-6 py-4 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none" required onChange={e => setFormData({...formData, name: e.target.value})} />
-              <input type="tel" placeholder="Mobile Number" className="w-full px-6 py-4 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none" required onChange={e => setFormData({...formData, phone: e.target.value})} />
-              <input type="text" placeholder="Location (e.g. Vijay Nagar, Indore)" className="w-full px-6 py-4 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none" required onChange={e => setFormData({...formData, address: e.target.value})} />
-              <div className="grid grid-cols-2 gap-4">
-                <select className="px-6 py-4 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none" onChange={e => setFormData({...formData, inquiryType: e.target.value})}>
-                  <option>Residential</option>
-                  <option>Commercial</option>
-                  <option>Industrial</option>
-                </select>
-                <input type="text" placeholder="Avg Monthly Bill" className="w-full px-6 py-4 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none" onChange={e => setFormData({...formData, bill: e.target.value})} />
-              </div>
-              <button type="submit" className="w-full bg-orange-500 text-white font-black py-5 rounded-xl text-xl hover:bg-black transition-all shadow-xl uppercase">Submit Inquiry Now</button>
+          
+          <div className="bg-white p-12 rounded-[40px] shadow-3xl text-gray-900 border-t-8 border-orange-500">
+            <h3 className="text-3xl font-black mb-8 text-blue-900">Request A Free Site Survey</h3>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <input type="text" placeholder="Full Name" required className="w-full p-4 bg-gray-100 rounded-xl outline-none focus:ring-2 focus:ring-orange-500" onChange={(e) => setFormData({...formData, name: e.target.value})} />
+              <input type="tel" placeholder="Mobile Number" required className="w-full p-4 bg-gray-100 rounded-xl outline-none focus:ring-2 focus:ring-orange-500" onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+              <input type="text" placeholder="Installation Address" required className="w-full p-4 bg-gray-100 rounded-xl outline-none focus:ring-2 focus:ring-orange-500" onChange={(e) => setFormData({...formData, address: e.target.value})} />
+              <select className="w-full p-4 bg-gray-100 rounded-xl outline-none border-none font-bold text-gray-500" onChange={(e) => setFormData({...formData, inquiryType: e.target.value})}>
+                <option>Residential Inquiry</option>
+                <option>Commercial Inquiry</option>
+                <option>Industrial Inquiry</option>
+              </select>
+              <button type="submit" className="w-full bg-orange-600 text-white font-black py-5 rounded-xl text-xl hover:bg-black transition-all shadow-xl uppercase tracking-widest">Submit & Contact on WhatsApp</button>
             </form>
           </div>
         </div>
       </section>
 
-      <footer className="bg-black py-10 text-center text-gray-500 text-sm border-t border-gray-800">
+      <footer className="bg-black py-8 text-center text-gray-500 text-sm">
         © 2026 DUATECH SOLAR SOLUTIONS | INDORE | ALL RIGHTS RESERVED
       </footer>
     </div>
