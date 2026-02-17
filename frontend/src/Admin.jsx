@@ -20,7 +20,7 @@ const Admin = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      axios.get('https://duatech.onrender.com/api/leads')
+      axios.get('/api/leads')
         .then(res => setLeads(res.data))
         .catch(err => console.log(err));
     }
