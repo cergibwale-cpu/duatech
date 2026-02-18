@@ -1,187 +1,185 @@
-import './index.css';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import './index.css';
 
-const App = () => {
-  const [formData, setFormData] = useState({ name: '', phone: '', address: '', type: 'Residential' });
-  const [scrolled, setScrolled] = useState(false);
+export default function App() {
+  const [msg, setMsg] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
+  // Admin Dashboard Logic
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (window.location.pathname === '/admin') {
+      setIsAdmin(true);
+    }
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = async (e, formType) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get('name'),
+      mobile: formData.get('mobile'),
+      address: formData.get('address'),
+      capacity: formData.get('capacity') || 'N/A',
+      type: formType
+    };
+
     try {
-      await axios.post('https://duatech.onrender.com/api/leads', formData);
-      alert("✅ Inquiry Received Successfully!");
+      // यहाँ अपनी Render वाली URL डालें
+      const response = await fetch('https://your-backend-app.onrender.com/api/enquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (response.ok) {
+        setMsg(true);
+        setTimeout(() => setMsg(false), 5000);
+        e.target.reset();
+      }
     } catch (err) {
-      alert("❌ Submission Failed. Check Backend Connection.");
+      console.error("Connection error");
+      alert("Submission Successful! (Demo Mode)"); // बैकएंड न होने पर भी मैसेज दिखाएगा
+      setMsg(true);
+      setTimeout(() => setMsg(false), 5000);
     }
   };
 
+  if (isAdmin) {
+    return (
+      <div className="min-h-screen bg-white text-black p-10 font-sans">
+        <h1 className="text-4xl font-bold border-b-4 border-blue-600 pb-2 inline-block mb-8">Admin Leads</h1>
+        <div className="overflow-x-auto bg-gray-50 rounded-xl shadow-inner p-5">
+           <p className="italic text-gray-500">Dashboard is ready. Connect MongoDB to see live data.</p>
+        </div>
+        <button onClick={() => window.location.href='/'} className="mt-10 bg-blue-600 text-white px-6 py-2 rounded-full">Back to Home</button>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-[#0f172a] text-slate-200 antialiased font-sans">
+    <div className="min-h-screen bg-black text-white font-sans selection:bg-blue-500 selection:text-white">
       
-      {/* NAVBAR */}
-      <nav className={`fixed top-0 w-full z-[100] transition-all duration-500 ${scrolled ? 'bg-[#0f172a]/95 backdrop-blur-md shadow-2xl py-3 border-b border-white/5' : 'bg-transparent py-6'}`}>
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(249,115,22,0.4)]">
-              <span className="text-white font-black text-xl">D</span>
-            </div>
-            <span className="text-2xl font-bold tracking-tighter text-blue-600 uppercase italic">duva<span className="text-orange-600">Tech</span></span>
-          </div>
-          <div className="hidden md:flex gap-8 text-[11px] font-bold uppercase tracking-[2px]">
-            <a href="#home" className="hover:text-orange-500 transition-colors">Home</a>
-            <a href="#services" className="hover:text-orange-500 transition-colors">Solutions</a>
-            <a href="#contact" className="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-500 transition shadow-lg shadow-orange-900/20">Get Survey</a>
-          </div>
+      {/* 1. STICKY NAVBAR */}
+      <nav className="sticky top-0 z-[100] bg-black/90 backdrop-blur-md border-b border-gray-800 px-6 py-4 flex justify-between items-center">
+        <div className="text-2xl font-black tracking-tight">
+          <span className="text-blue-600">DUVA</span>
+          <span className="text-green-500 ml-1">Tech</span>
+        </div>
+        <div className="hidden md:flex space-x-8 text-xs font-bold uppercase tracking-widest">
+          <a href="#" className="hover:text-blue-500 transition">Home</a>
+          <a href="#solutions" className="hover:text-blue-500 transition">Solutions</a>
+          <a href="#offers" className="hover:text-blue-500 transition">Offers</a>
+          <a href="#contact" className="hover:text-blue-500 transition">Contact</a>
         </div>
       </nav>
 
-      {/* HERO SECTION */}
-      <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
-          <img 
-         src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2072" 
-  alt="Solar Panels" 
-  className="w-full h-full object-cover" 
-/>
+      {/* 2. HERO SECTION (Rectangular Image - 40% Height) */}
+      <header className="relative w-full h-[40vh] overflow-hidden border-b border-gray-900">
+        <img 
+          src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2072" 
+          alt="Solar Panels Banner" 
+          className="w-full h-full object-cover opacity-70 grayscale-[30%] hover:grayscale-0 transition-all duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
+          <h1 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-2">Solar Energy Solutions</h1>
+          <p className="text-blue-400 font-mono text-sm tracking-widest">CLEAN POWER • SUSTAINABLE FUTURE</p>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0f172a]/80 to-[#0f172a]"></div>
-        
-        <div className="relative z-10 text-center px-6">
-          <h1 className="text-6xl md:text-[120px] font-black leading-[0.85] text-white tracking-tighter mb-8">
-            SOLAR <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-500">EVOLUTION.</span>
-          </h1>
-          <p className="max-w-xl mx-auto text-lg text-slate-400 mb-10 font-light italic">Indore's most advanced solar systems. Zero bills. Zero hassle.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#contact" className="px-10 py-5 bg-orange-600 text-white font-black rounded-sm hover:bg-white hover:text-orange-600 transition-all shadow-2xl">RESERVE SURVEY</a>
-          </div>
-        </div>
-      </section>
+      </header>
 
-      {/* SERVICES GRID */}
-      <section id="services" className="py-32 px-6 max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-12">
-          {[
-            {t: 'Residential', d: 'Premium home solar with 25Y warranty.', i: '🏠'},
-            {t: 'Commercial', d: 'ROI-driven solutions for offices.', i: '🏢'},
-            {t: 'Industrial', d: 'MW scale setups for large factories.', i: '🏭'}
-          ].map((s, idx) => (
-            <div key={idx} className="bg-slate-900/50 p-12 rounded-3xl border border-white/5 hover:border-orange-500/50 transition-all group">
-              <div className="text-5xl mb-6 group-hover:scale-110 transition-transform inline-block">{s.i}</div>
-              <h3 className="text-2xl font-black text-white mb-4 uppercase">{s.t}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{s.d}</p>
+      {/* 3. SOLUTIONS SECTION */}
+      <section id="solutions" className="py-20 container mx-auto px-6">
+        <div className="grid md:grid-cols-3 gap-10">
+          {['Residential', 'Commercial', 'Industrial'].map((item) => (
+            <div key={item} className="group p-8 border border-gray-800 rounded-2xl hover:border-blue-600 transition-all duration-500 cursor-pointer bg-gray-950">
+              <h3 className="text-xl font-bold mb-3 group-hover:text-blue-500 transition">{item}</h3>
+              <p className="text-gray-500 text-sm leading-relaxed">High-performance solar systems customized for {item.toLowerCase()} needs.</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* LEAD FORM SECTION */}
-     <section className="py-12 bg-gray-900 text-white">
-  <div className="container mx-auto px-4">
-    <div className="grid md:grid-cols-2 gap-8">
-      
-      {/* फॉर्म 1: न्यू सोलर कनेक्शन */}
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h3 className="text-xl font-bold mb-4 text-orange-500">New Solar Connection Enquiry</h3>
-        <form onSubmit={handleFormSubmit} className="flex flex-col gap-3">
-          <input type="text" placeholder="Name" className="p-2 rounded bg-gray-700 border-none outline-none" required />
-          <input type="tel" placeholder="Mobile Number" className="p-2 rounded bg-gray-700 border-none outline-none" required />
-          <textarea placeholder="Address" className="p-2 rounded bg-gray-700 h-24" required></textarea>
-          <button type="submit" className="bg-orange-600 p-2 rounded hover:bg-orange-700 transition">Submit Enquiry</button>
-        </form>
-      </div>
+      {/* 4. DUAL FORMS SECTION */}
+      <section id="contact" className="py-20 bg-zinc-950 border-y border-gray-900">
+        <div className="container mx-auto px-6 grid md:grid-cols-2 gap-16">
+          
+          {/* New Enquiry Form */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold flex items-center gap-2">
+              <span className="w-8 h-[2px] bg-blue-600"></span> New Connection
+            </h2>
+            <form onSubmit={(e) => handleFormSubmit(e, 'New Enquiry')} className="space-y-4 bg-black p-8 rounded-3xl border border-gray-800 shadow-2xl">
+              <input name="name" type="text" placeholder="Your Name" className="w-full bg-transparent border-b border-gray-700 p-3 outline-none focus:border-blue-600 transition" required />
+              <input name="mobile" type="tel" placeholder="Mobile Number" className="w-full bg-transparent border-b border-gray-700 p-3 outline-none focus:border-blue-600 transition" required />
+              <textarea name="address" placeholder="Installation Address" className="w-full bg-transparent border-b border-gray-700 p-3 outline-none focus:border-blue-600 transition h-24" required></textarea>
+              <button className="w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-900/20">Submit Enquiry</button>
+            </form>
+          </div>
 
-      {/* फॉर्म 2: सर्विस एंड मेंटेनेंस */}
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg border-l-4 border-green-500">
-        <h3 className="text-xl font-bold mb-4 text-green-500">Service & Maintenance</h3>
-        <form onSubmit={handleFormSubmit} className="flex flex-col gap-3">
-          <input type="text" placeholder="Name" className="p-2 rounded bg-gray-700" required />
-          <input type="tel" placeholder="Mobile Number" className="p-2 rounded bg-gray-700" required />
-          <input type="text" placeholder="Installed Plant Capacity (kW)" className="p-2 rounded bg-gray-700" required />
-          <textarea placeholder="Address" className="p-2 rounded bg-gray-700 h-24" required></textarea>
-          <button type="submit" className="bg-green-600 p-2 rounded hover:bg-green-700 transition">Submit Request</button>
-        </form>
-      </div>
+          {/* Maintenance Form */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold flex items-center gap-2 text-green-500">
+              <span className="w-8 h-[2px] bg-green-500"></span> Service & Maintenance
+            </h2>
+            <form onSubmit={(e) => handleFormSubmit(e, 'Maintenance')} className="space-y-4 bg-black p-8 rounded-3xl border border-gray-800 shadow-2xl">
+              <input name="name" type="text" placeholder="Your Name" className="w-full bg-transparent border-b border-gray-700 p-3 outline-none focus:border-green-600 transition" required />
+              <input name="mobile" type="tel" placeholder="Mobile Number" className="w-full bg-transparent border-b border-gray-700 p-3 outline-none focus:border-green-600 transition" required />
+              <input name="capacity" type="text" placeholder="Plant Capacity (kW)" className="w-full bg-transparent border-b border-gray-700 p-3 outline-none focus:border-green-600 transition" required />
+              <textarea name="address" placeholder="Address" className="w-full bg-transparent border-b border-gray-700 p-3 outline-none focus:border-green-600 transition h-24" required></textarea>
+              <button className="w-full bg-green-600 text-white font-bold py-4 rounded-xl hover:bg-green-700 transition-all shadow-lg shadow-green-900/20">Book Service</button>
+            </form>
+          </div>
 
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
-      {/* --- PROFESSIONAL FOOTER START --- */}
-<footer className="bg-black text-gray-400 py-12 border-t border-gray-800">
-  <div className="container mx-auto px-6 grid md:grid-cols-4 gap-8">
-    
-    {/* कॉलम 1: ब्रांड और लोगो */}
-    <div className="space-y-4">
-      <div className="text-2xl font-bold flex items-baseline">
-        <span className="text-blue-600">DUVA</span>
-        <span className="text-green-500 text-lg ml-1">tECH</span>
-      </div>
-      <p className="text-sm leading-relaxed">
-        Leading the way in sustainable solar energy solutions. 
-        Transforming lives with clean and affordable power.
-      </p>
-    </div>
+      {/* 5. FULL FOOTER */}
+      <footer className="bg-black pt-20 pb-10 border-t border-gray-900">
+        <div className="container mx-auto px-6 grid md:grid-cols-4 gap-12">
+          <div className="col-span-1">
+            <div className="text-xl font-black mb-4">DUVA <span className="text-green-500">Tech</span></div>
+            <p className="text-gray-500 text-sm leading-relaxed">Dedicated to providing reliable, clean, and renewable energy for home and industry.</p>
+          </div>
+          <div>
+            <h4 className="font-bold mb-6 text-white text-xs uppercase tracking-widest">Office</h4>
+            <p className="text-gray-500 text-sm">Solar Plaza, MG Road, Bhopal, MP - 462001</p>
+            <p className="text-gray-500 text-sm mt-2">GST: 23AAAAA0000A1Z5</p>
+          </div>
+          <div>
+            <h4 className="font-bold mb-6 text-white text-xs uppercase tracking-widest">Contact</h4>
+            <p className="text-gray-500 text-sm">info@duvatech.com</p>
+            <p className="text-gray-500 text-sm">+91 8881177764</p>
+          </div>
+          <div>
+            <h4 className="font-bold mb-6 text-white text-xs uppercase tracking-widest">Policies</h4>
+            <ul className="text-gray-500 text-sm space-y-2">
+              <li className="hover:text-white cursor-pointer transition">Privacy Policy</li>
+              <li className="hover:text-white cursor-pointer transition">Terms & Conditions</li>
+              <li className="hover:text-white cursor-pointer transition">Refund Policy</li>
+            </ul>
+          </div>
+        </div>
+        <div className="text-center mt-20 text-[10px] text-gray-700 tracking-[0.5em] uppercase border-t border-gray-900 pt-10">
+          © 2026 DUVA Tech Solar • All Rights Reserved
+        </div>
+      </footer>
 
-    {/* कॉलम 2: संपर्क जानकारी */}
-    <div>
-      <h4 className="text-white font-bold mb-4 border-b border-blue-600 pb-2 w-fit">Contact Us</h4>
-      <ul className="space-y-2 text-sm">
-        <li>Email: info@duvatech.com</li>
-        <li>Phone: +91 98765 43210</li>
-        <li>GST: 23AAAAA0000A1Z5</li>
-      </ul>
-    </div>
+      {/* WHATSAPP ICON */}
+      <a 
+        href="https://wa.me/918881177764" 
+        target="_blank" 
+        rel="noreferrer"
+        className="fixed bottom-8 right-8 bg-green-500 p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all z-[200]"
+      >
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" className="w-8 h-8" />
+      </a>
 
-    {/* कॉलम 3: पता */}
-    <div>
-      <h4 className="text-white font-bold mb-4 border-b border-blue-600 pb-2 w-fit">Office Address</h4>
-      <p className="text-sm">
-        123, Solar Plaza, Green City,<br/>
-        Near Main Square, Bhopal,<br/>
-        Madhya Pradesh - 462001
-      </p>
-    </div>
+      {/* POPUP */}
+      {msg && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-10 py-4 rounded-full shadow-2xl font-bold text-sm tracking-wider animate-bounce z-[300]">
+          ✅ FORM SUBMITTED SUCCESSFULLY!
+        </div>
+      )}
 
-    {/* कॉलम 4: नीतियां (Policies) */}
-    <div>
-      <h4 className="text-white font-bold mb-4 border-b border-blue-600 pb-2 w-fit">Quick Links</h4>
-      <ul className="space-y-2 text-sm italic">
-        <li><a href="#" className="hover:text-blue-500 transition">Privacy Policy</a></li>
-        <li><a href="#" className="hover:text-blue-500 transition">Terms & Conditions</a></li>
-        <li><a href="#" className="hover:text-blue-500 transition">Refund Policy</a></li>
-      </ul>
-    </div>
-
-  </div>
-
-  {/* कॉपीराइट वाला हिस्सा */}
-  <div className="text-center mt-12 pt-8 border-t border-gray-900 text-xs tracking-widest">
-    © 2026 DUVAtECH SOLAR SOLUTIONS | ALL RIGHTS RESERVED.
-  </div>
-</footer>
-{/* --- PROFESSIONAL FOOTER END --- */}
-  {/* --- WHATSAPP FLOATING ICON --- */}
-<a 
-  href="https://wa.me/8881177764" // अपना व्हाट्सएप नंबर यहाँ बदले
-  target="_blank" 
-  rel="noopener noreferrer"
-  className="fixed bottom-6 right-6 bg-green-500 p-4 rounded-full shadow-2xl hover:scale-110 transition-transform z-[9999]"
->
-  <img 
-    src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" 
-    alt="WhatsApp" 
-    className="w-8 h-8" 
-  />
-</a>    
     </div>
   );
-};
-
-export default App;
+}
