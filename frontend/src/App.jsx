@@ -32,7 +32,7 @@ const App = () => {
             <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(249,115,22,0.4)]">
               <span className="text-white font-black text-xl">D</span>
             </div>
-            <span className="text-2xl font-black tracking-tighter text-blue-600 uppercase italic">duva<span className="text-orange-600">Tech</span></span>
+            <span className="text-2xl font-bold tracking-tighter text-blue-600 uppercase italic">duva<span className="text-orange-600">Tech</span></span>
           </div>
           <div className="hidden md:flex gap-8 text-[11px] font-bold uppercase tracking-[2px]">
             <a href="#home" className="hover:text-orange-500 transition-colors">Home</a>
@@ -46,7 +46,7 @@ const App = () => {
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 opacity-30">
           <img 
-  src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2072" 
+         src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2072" 
   alt="Solar Panels" 
   className="w-full h-full object-cover" 
 />
