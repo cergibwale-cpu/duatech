@@ -1,3 +1,4 @@
+import './index.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -44,7 +45,11 @@ const App = () => {
       {/* HERO SECTION */}
       <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 opacity-30">
-           <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2070&auto=format&fit=crop" style={{width: '300',"w-full height:'auto'}} alt="Solar" />
+          <img 
+  src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?q=80&w=2072" 
+  alt="Solar Panels" 
+  className="w-full h-full object-cover" 
+/>
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0f172a]/80 to-[#0f172a]"></div>
         
