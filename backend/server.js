@@ -9,7 +9,7 @@ app.use(cors());
 
 // ------------------ MONGODB URL FIXED ------------------ //
 const MONGO_URL =
-  "mongodb+srv://CERGIBWALE_DB_USER:YOUR_PASSWORD_HERE@cluster0.ogg6awx.mongodb.net/solarLeads?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://cergibwale_db_user:VtdYMmaN9Cd0ZFni%40cluster0.ogg6awx.mongodb.net/Duatech_solar_leads?retryWrites=true&w=majority&appName=Cluster0";
 
 mongoose
   .connect(MONGO_URL)
