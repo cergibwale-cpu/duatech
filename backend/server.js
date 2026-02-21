@@ -39,6 +39,15 @@ app.post('/api/leads', async (req, res) => {
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
+// लॉगिन के लिए नया रास्ता
+app.post('/api/login', (req, res) => {
+    const { password } = req.body;
+    // जो पासवर्ड तूने MongoDB में '123' डाला है, वही यहाँ चेक होगा
+    if (password === "123") {
+        res.status(200).json({ success: true });
+    } else {
+        res.status(401).json({ success: false, message: "गलत पासवर्ड!" });
+    }
 });
 
 app.get('/api/admin/leads', async (req, res) => {
