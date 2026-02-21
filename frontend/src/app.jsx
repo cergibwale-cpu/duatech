@@ -28,7 +28,7 @@ function App() {
             <Route path="/" element={<Home />} />
             
             {/* यहाँ मैंने सुधार कर दिया है: path अलग और element अलग */}
-            <Route path="/services" element={<Services />} />
+            <Route path="/Services" element={<Services />} />
             
             <Route path="/products" element={<Products />} />
             <Route path="/projects" element={<Projects />} />
