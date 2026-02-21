@@ -1,71 +1,72 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import React from 'react';
 
-const app = express();
+const Services = () => {
+  return (
+    <section id="services" className="py-16 bg-gray-50">
+      <div className="max-w-5xl mx-auto px-6">
+        <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-10">
+          Our Solar Solutions
+        </h2>
+        
+        <div className="grid gap-6">
+          {/* On-Grid Solar System */}
+          <details className="group border-2 border-orange-100 rounded-xl bg-white shadow-md overflow-hidden">
+            <summary className="flex justify-between items-center p-6 cursor-pointer font-bold text-xl text-gray-800 list-none hover:bg-orange-50 transition-colors">
+              On-Grid Solar System
+              <span className="text-orange-500 transition-transform duration-300 group-open:rotate-180">▼</span>
+            </summary>
+            <div className="p-6 border-t border-gray-100 text-gray-700 space-y-3">
+              <p><span className="font-bold text-orange-600">Description:</span> A battery-less system that works in synchronization with the government electricity grid.</p>
+              <p><span className="font-bold text-orange-600">Benefits:</span> Drastic reduction in electricity bills via Net-Metering, lowest installation cost, and zero battery maintenance.</p>
+              <p><span className="font-bold text-orange-600">Drawbacks:</span> The system shuts down during power outages for safety reasons (Anti-islanding).</p>
+              <p><span className="font-bold text-orange-600">Suitable For:</span> Urban areas and industries with stable grid connectivity looking for maximum ROI.</p>
+            </div>
+          </details>
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+          {/* Off-Grid Solar System */}
+          <details className="group border-2 border-orange-100 rounded-xl bg-white shadow-md overflow-hidden">
+            <summary className="flex justify-between items-center p-6 cursor-pointer font-bold text-xl text-gray-800 list-none hover:bg-orange-50 transition-colors">
+              Off-Grid Solar System
+              <span className="text-orange-500 transition-transform duration-300 group-open:rotate-180">▼</span>
+            </summary>
+            <div className="p-6 border-t border-gray-100 text-gray-700 space-y-3">
+              <p><span className="font-bold text-orange-600">Description:</span> An independent solar power plant supported by heavy-duty battery storage.</p>
+              <p><span className="font-bold text-orange-600">Benefits:</span> Complete energy independence and 24/7 power backup even in remote locations.</p>
+              <p><span className="font-bold text-orange-600">Drawbacks:</span> Higher initial investment due to batteries; requires battery replacement every 5-7 years.</p>
+              <p><span className="font-bold text-orange-600">Suitable For:</span> Remote areas, farmhouses, and places with frequent or long power cuts.</p>
+            </div>
+          </details>
 
-// MongoDB Connection
-const mongoURI = process.env.MONGODB_URI || "mongodb+srv://cergibwale_db_user:Vl149xx5IHq9p8Ld@cluster0.p78vi.mongodb.net/Solar_Lead?retryWrites=true&w=majority&appName=Cluster0";
+          {/* Hybrid Solar System */}
+          <details className="group border-2 border-orange-100 rounded-xl bg-white shadow-md overflow-hidden">
+            <summary className="flex justify-between items-center p-6 cursor-pointer font-bold text-xl text-gray-800 list-none hover:bg-orange-50 transition-colors">
+              Hybrid Solar System
+              <span className="text-orange-500 transition-transform duration-300 group-open:rotate-180">▼</span>
+            </summary>
+            <div className="p-6 border-t border-gray-100 text-gray-700 space-y-3">
+              <p><span className="font-bold text-orange-600">Description:</span> Combining the best of both worlds—Grid-tied features with battery backup security.</p>
+              <p><span className="font-bold text-orange-600">Benefits:</span> Saves on bills via Net-Metering while ensuring power backup during outages.</p>
+              <p><span className="font-bold text-orange-600">Drawbacks:</span> Most complex installation and highest initial setup cost.</p>
+              <p><span className="font-bold text-orange-600">Suitable For:</span> Critical operations and high-end residences where both savings and backup are mandatory.</p>
+            </div>
+          </details>
 
-mongoose.connect(mongoURI)
-  .then(() => console.log('✅ MongoDB Connected Successfully'))
-  .catch(err => console.error('❌ Connection Error:', err));
+          {/* AMC & Maintenance */}
+          <details className="group border-2 border-blue-100 rounded-xl bg-white shadow-md overflow-hidden">
+            <summary className="flex justify-between items-center p-6 cursor-pointer font-bold text-xl text-gray-800 list-none hover:bg-blue-50 transition-colors">
+              AMC & Professional Maintenance
+              <span className="text-blue-500 transition-transform duration-300 group-open:rotate-180">▼</span>
+            </summary>
+            <div className="p-6 border-t border-gray-100 text-gray-700 space-y-3">
+              <p><span className="font-bold text-blue-600">Our Service:</span> We provide professional deep cleaning of solar panels to ensure maximum solar harvest.</p>
+              <p><span className="font-bold text-blue-600">Expertise:</span> Our team performs all types of solar services including wiring health checks, structure tightening, and inverter diagnostics.</p>
+              <p><span className="font-bold text-blue-600">Why AMC:</span> Regular maintenance increases energy efficiency by up to 25% and ensures a 25-year lifespan.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-// Lead Schema
-const LeadSchema = new mongoose.Schema({
-    name: String,
-    mobile: String,
-    email: String,
-    address: String,
-    serviceType: String,
-    projectType: String,
-    monthlyBill: String,
-    status: { type: String, default: 'Pending' },
-    createdAt: { type: Date, default: Date.now }
-});
-
-const Lead = mongoose.model('Lead', LeadSchema);
-
-// --- API Routes ---
-
-// 1. नई लीड सेव करने के लिए
-app.post('/api/leads', async (req, res) => {
-    try {
-        const newLead = new Lead(req.body);
-        await newLead.save();
-        res.status(201).json({ success: true, message: "Lead saved successfully!" });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-}); // <--- यहाँ ब्रैकेट बंद नहीं था, अब ठीक कर दिया है
-
-// 2. एडमिन लॉगिन के लिए
-app.post('/api/login', (req, res) => {
-    const { password } = req.body;
-    // पासवर्ड यहाँ '123' रखा है
-    if (password === "123") {
-        res.status(200).json({ success: true });
-    } else {
-        res.status(401).json({ success: false, message: "गलत पासवर्ड!" });
-    }
-});
-
-// 3. सारी लीड्स देखने के लिए
-app.get('/api/admin/leads', async (req, res) => {
-    try {
-        const leads = await Lead.find().sort({ createdAt: -1 });
-        res.json(leads);
-    } catch (error) {
-        res.status(500).json({ error: "Fetching failed" });
-    }
-});
-
-// Server Port
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`🚀 Server is running on port ${PORT}`);
-});
+export default Services;
