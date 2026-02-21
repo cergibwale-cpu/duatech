@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // 1. Components Imports
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import Services from './components/ServicesFix';
+import Services from './components/Services';
 import WhatsAppButton from './components/WhatsAppButton';
 
 // 2. Pages Imports
