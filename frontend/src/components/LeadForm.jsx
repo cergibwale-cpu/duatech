@@ -3,11 +3,12 @@ import { useState } from "react";
 export default function LeadForm() {
   const [type, setType] = useState("");
 
-  // Input fields ke liye common style
+  // Background Yellow kar diya hai taaki agar text white bhi ho toh dikh jaye
   const inputStyle = {
-    color: 'black',
-    backgroundColor: 'white',
-    border: '1px solid #ccc'
+    color: 'black', // Text color black rahega
+    backgroundColor: '#ffffcc', // Light Yellow background
+    border: '2px solid #333', // Thoda dark border taaki boxes saaf dikhein
+    padding: '12px'
   };
 
   return (
@@ -17,7 +18,7 @@ export default function LeadForm() {
       {/* BUTTONS */}
       <div className="flex justify-between mb-6">
         <button
-          className={`w-1/2 p-3 mr-2 rounded text-white ${
+          className={`w-1/2 p-3 mr-2 rounded text-white font-bold ${
             type === "new" ? "bg-blue-600" : "bg-gray-500"
           }`}
           onClick={() => setType("new")}
@@ -26,7 +27,7 @@ export default function LeadForm() {
         </button>
 
         <button
-          className={`w-1/2 p-3 ml-2 rounded text-white ${
+          className={`w-1/2 p-3 ml-2 rounded text-white font-bold ${
             type === "Service" ? "bg-blue-600" : "bg-gray-500"
           }`}
           onClick={() => setType("Service")}
@@ -47,7 +48,7 @@ export default function LeadForm() {
             name="name"
             required
             placeholder="Full Name"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           />
 
@@ -58,7 +59,7 @@ export default function LeadForm() {
             maxLength="10"
             pattern="[0-9]{10}"
             placeholder="Phone Number (10 digits)"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           />
 
@@ -67,7 +68,7 @@ export default function LeadForm() {
             name="city"
             required
             placeholder="City"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           />
 
@@ -76,7 +77,7 @@ export default function LeadForm() {
             name="pincode"
             required
             placeholder="Pincode"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           />
 
@@ -85,7 +86,7 @@ export default function LeadForm() {
             name="billAmount"
             required
             placeholder="Bill Amount"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           />
 
@@ -94,7 +95,7 @@ export default function LeadForm() {
             name="consumerNumber"
             required
             placeholder="Consumer Number"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           />
 
@@ -102,11 +103,11 @@ export default function LeadForm() {
             name="address"
             required
             placeholder="Full Address"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           ></textarea>
 
-          <button className="w-full bg-blue-600 text-white p-3 rounded text-lg">
+          <button className="w-full bg-blue-600 text-white p-3 rounded text-lg font-bold">
             Submit
           </button>
         </form>
@@ -124,7 +125,7 @@ export default function LeadForm() {
             name="name"
             required
             placeholder="Full Name"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           />
 
@@ -135,7 +136,7 @@ export default function LeadForm() {
             maxLength="10"
             pattern="[0-9]{10}"
             placeholder="Phone Number (10 digits)"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           />
 
@@ -144,7 +145,7 @@ export default function LeadForm() {
             name="capacity"
             required
             placeholder="Plant Capacity (kW)"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           />
 
@@ -152,11 +153,11 @@ export default function LeadForm() {
             name="address"
             required
             placeholder="Full Address"
-            className="w-full p-3 rounded"
+            className="w-full rounded"
             style={inputStyle}
           ></textarea>
 
-          <button className="w-full bg-blue-600 text-white p-3 rounded text-lg">
+          <button className="w-full bg-blue-600 text-white p-3 rounded text-lg font-bold">
             Submit
           </button>
         </form>
