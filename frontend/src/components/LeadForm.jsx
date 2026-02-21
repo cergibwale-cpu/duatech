@@ -19,7 +19,7 @@ export default function LeadForm() {
         </button>
 
         <button
-          className={`w-1/2 p-3 ml-2 rounded text-white ${
+          className={`w-1/2 p-3 ml-2 rounded text-black ${
             type === "Service" ? "bg-blue-600" : "bg-gray-500"
           }`}
           onClick={() => setType("Service")}
