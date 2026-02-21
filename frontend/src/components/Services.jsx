@@ -1,68 +1,79 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const Services = () => {
+  // यह पता रखने के लिए कि कौन सा सेक्शन खुला है
+  const [openSection, setOpenSection] = useState(null);
+
+  const toggleSection = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
+  const solarData = [
+    {
+      id: 'on-grid',
+      title: 'On-Grid Solar System',
+      desc: 'A battery-less system that works in synchronization with the government electricity grid.',
+      benefits: 'Zero electricity bills via net-metering, lowest cost, and minimal maintenance.',
+      drawbacks: 'No power backup during grid outages (safety shutdown).',
+      suitable: 'Residential and urban areas with rare power cuts.'
+    },
+    {
+      id: 'off-grid',
+      title: 'Off-Grid Solar System',
+      desc: 'A standalone system powered by heavy-duty battery storage.',
+      benefits: 'Complete energy independence and 24/7 backup even during blackouts.',
+      drawbacks: 'Higher initial cost due to batteries; replacement needed every 5-7 years.',
+      suitable: 'Remote locations or areas with long, frequent power cuts.'
+    },
+    {
+      id: 'hybrid',
+      title: 'Hybrid Solar System',
+      desc: 'Combining the best of both worlds—Net-metering plus battery backup.',
+      benefits: 'Saves on bills while ensuring power backup during outages.',
+      drawbacks: 'Most expensive system to install and maintain.',
+      suitable: 'Critical setups where zero downtime and savings are both required.'
+    },
+    {
+      id: 'amc',
+      title: 'AMC & Solar Maintenance',
+      desc: 'Professional deep cleaning and health check for all solar plants.',
+      benefits: 'Increases energy efficiency by up to 25% and ensures long life.',
+      drawbacks: 'Requires regular scheduling.',
+      suitable: 'All existing solar owners who want maximum output.'
+    }
+  ];
+
   return (
-    <section id="services" className="py-16 bg-gray-50">
-      <div className="max-w-5xl mx-auto px-6">
-        <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-10">
+    <section className="py-20 bg-gray-50 min-h-screen">
+      <div className="max-w-4xl mx-auto px-6 mt-10">
+        <h2 className="text-4xl font-bold text-center text-gray-900 mb-12 uppercase tracking-tight">
           Our Solar Solutions
         </h2>
-        
-        <div className="grid gap-6">
-          {/* On-Grid Solar System */}
-          <details className="group border-2 border-orange-100 rounded-xl bg-white shadow-md overflow-hidden">
-            <summary className="flex justify-between items-center p-6 cursor-pointer font-bold text-xl text-gray-800 list-none hover:bg-orange-50 transition-colors">
-              On-Grid Solar System
-              <span className="text-orange-500 transition-transform duration-300 group-open:rotate-180">▼</span>
-            </summary>
-            <div className="p-6 border-t border-gray-100 text-gray-700 space-y-3">
-              <p><span className="font-bold text-orange-600">Description:</span> A battery-less system that works in synchronization with the government electricity grid.</p>
-              <p><span className="font-bold text-orange-600">Benefits:</span> Drastic reduction in electricity bills via Net-Metering, lowest installation cost, and zero battery maintenance.</p>
-              <p><span className="font-bold text-orange-600">Drawbacks:</span> The system shuts down during power outages for safety reasons (Anti-islanding).</p>
-              <p><span className="font-bold text-orange-600">Suitable For:</span> Urban areas and industries with stable grid connectivity looking for maximum ROI.</p>
-            </div>
-          </details>
 
-          {/* Off-Grid Solar System */}
-          <details className="group border-2 border-orange-100 rounded-xl bg-white shadow-md overflow-hidden">
-            <summary className="flex justify-between items-center p-6 cursor-pointer font-bold text-xl text-gray-800 list-none hover:bg-orange-50 transition-colors">
-              Off-Grid Solar System
-              <span className="text-orange-500 transition-transform duration-300 group-open:rotate-180">▼</span>
-            </summary>
-            <div className="p-6 border-t border-gray-100 text-gray-700 space-y-3">
-              <p><span className="font-bold text-orange-600">Description:</span> An independent solar power plant supported by heavy-duty battery storage.</p>
-              <p><span className="font-bold text-orange-600">Benefits:</span> Complete energy independence and 24/7 power backup even in remote locations.</p>
-              <p><span className="font-bold text-orange-600">Drawbacks:</span> Higher initial investment due to batteries; requires battery replacement every 5-7 years.</p>
-              <p><span className="font-bold text-orange-600">Suitable For:</span> Remote areas, farmhouses, and places with frequent or long power cuts.</p>
-            </div>
-          </details>
+        <div className="space-y-4">
+          {solarData.map((item) => (
+            <div key={item.id} className="border border-gray-200 rounded-xl bg-white shadow-sm overflow-hidden">
+              <button
+                onClick={() => toggleSection(item.id)}
+                className="w-full flex justify-between items-center p-6 text-left font-bold text-xl text-gray-800 hover:bg-gray-50 transition-all"
+              >
+                {item.title}
+                <span className={`transform transition-transform duration-300 ${openSection === item.id ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
+              </button>
 
-          {/* Hybrid Solar System */}
-          <details className="group border-2 border-orange-100 rounded-xl bg-white shadow-md overflow-hidden">
-            <summary className="flex justify-between items-center p-6 cursor-pointer font-bold text-xl text-gray-800 list-none hover:bg-orange-50 transition-colors">
-              Hybrid Solar System
-              <span className="text-orange-500 transition-transform duration-300 group-open:rotate-180">▼</span>
-            </summary>
-            <div className="p-6 border-t border-gray-100 text-gray-700 space-y-3">
-              <p><span className="font-bold text-orange-600">Description:</span> Combining the best of both worlds—Grid-tied features with battery backup security.</p>
-              <p><span className="font-bold text-orange-600">Benefits:</span> Saves on bills via Net-Metering while ensuring power backup during outages.</p>
-              <p><span className="font-bold text-orange-600">Drawbacks:</span> Most complex installation and highest initial setup cost.</p>
-              <p><span className="font-bold text-orange-600">Suitable For:</span> Critical operations and high-end residences where both savings and backup are mandatory.</p>
+              {/* अगर सेक्शन खुला है तभी नीचे का कंटेंट दिखेगा */}
+              {openSection === item.id && (
+                <div className="p-6 border-t border-gray-100 bg-white text-gray-700 space-y-3 animate-fadeIn">
+                  <p><span className="font-bold text-green-600">Description:</span> {item.desc}</p>
+                  <p><span className="font-bold text-green-600">Benefits:</span> {item.benefits}</p>
+                  <p><span className="font-bold text-green-600">Drawbacks:</span> {item.drawbacks}</p>
+                  <p><span className="font-bold text-green-600">Suitable For:</span> {item.suitable}</p>
+                </div>
+              )}
             </div>
-          </details>
-
-          {/* AMC & Maintenance */}
-          <details className="group border-2 border-blue-100 rounded-xl bg-white shadow-md overflow-hidden">
-            <summary className="flex justify-between items-center p-6 cursor-pointer font-bold text-xl text-gray-800 list-none hover:bg-blue-50 transition-colors">
-              AMC & Professional Maintenance
-              <span className="text-blue-500 transition-transform duration-300 group-open:rotate-180">▼</span>
-            </summary>
-            <div className="p-6 border-t border-gray-100 text-gray-700 space-y-3">
-              <p><span className="font-bold text-blue-600">Our Service:</span> We provide professional deep cleaning of solar panels to ensure maximum solar harvest.</p>
-              <p><span className="font-bold text-blue-600">Expertise:</span> Our team performs all types of solar services including wiring health checks, structure tightening, and inverter diagnostics.</p>
-              <p><span className="font-bold text-blue-600">Why AMC:</span> Regular maintenance increases energy efficiency by up to 25% and ensures a 25-year lifespan.</p>
-            </div>
-          </details>
+          ))}
         </div>
       </div>
     </section>
