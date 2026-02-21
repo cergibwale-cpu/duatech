@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ------------------ DATABASE CONNECTION ------------------ //
 // Isko env file mein rakhna best hai, par filhal fix kar diya hai
-const MONGO_URL = process.env.MONGO_URI || "mongodb+srv://cergibwale_db_user:VtdYMmaN9Cd0ZFni@cluster0.ogg6awx.mongodb.net/Duvatech_solar_leads?retryWrites=true&w=majority";
+const MONGO_URL = process.env.MONGO_URI || "mongodb+srv://CERGIBWALE_DB_USER:VtdYMmaN9Cd0ZFni@cluster0.ogg6awx.mongodb.net/Duvatech_solar_leads?retryWrites=true&w=majority";
 
 mongoose
   .connect(MONGO_URL)
